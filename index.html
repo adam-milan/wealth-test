@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>財富觀測驗</title>
+    <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
     <style>
         body {
             font-family: "Microsoft JhengHei", sans-serif;
@@ -17,6 +18,15 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
         }
         #quiz-container, #result-container {
             display: none;
@@ -36,6 +46,8 @@
             cursor: pointer;
             margin: 10px 0;
             font-size: 16px;
+            width: 100%;
+            max-width: 300px;
         }
         button:hover {
             background-color: #45a049;
@@ -55,14 +67,11 @@
             margin-bottom: 20px;
             color: #666;
             font-size: 16px;
+            text-align: center;
         }
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 20px;
-        }
-        h2 {
-            color: #34495e;
-            margin-bottom: 15px;
+        h1, h2, h3 {
+            text-align: center;
+            color: #333;
         }
         .scores {
             margin-top: 20px;
@@ -80,10 +89,14 @@
 </head>
 <body>
     <div class="container">
+        <div class="logo">
+            <img src="https://imgur.com/VbrcKLI" alt="三分鐘投資教室 Logo">
+        </div>
+        
         <div id="start-screen">
             <h1>財富觀測驗</h1>
             <p>這個測驗將從多個維度評估你的財富觀念，包括：風險承受度、理財知識、投資傾向、理財習慣等。共12題，請根據你的真實想法選擇最符合的選項。</p>
-            <button id="start-btn">開始測驗</button>
+            <center><button id="start-btn">開始測驗</button></center>
         </div>
 
         <div id="quiz-container">
@@ -105,226 +118,281 @@
                     <p>理財習慣：<span id="habit-score"></span></p>
                 </div>
             </div>
-            <button id="restart-btn">重新測驗</button>
+
+            <!-- ConvertKit 表單 -->
+            <form action="https://app.kit.com/forms/7394778/subscriptions" 
+                  class="seva-form formkit-form" 
+                  method="post" 
+                  data-sv-form="7394778" 
+                  data-uid="5d34bc689d" 
+                  data-format="inline" 
+                  data-version="5" 
+                  min-width="400 500 600 700 800"
+                  style="background-color: rgb(255, 255, 255); border-radius: 6px;">
+                <div data-style="full">
+                    <div data-element="column" class="formkit-column" style="background-color: rgb(249, 250, 251);">
+                        <div class="formkit-background" style="opacity: 0.3;"></div>
+                        <div class="formkit-header" data-element="header" style="color: rgb(77, 77, 77); font-size: 20px; font-weight: 700;">
+                            <h2 style="text-align:center">獲得更好的財務生活👉</h2>
+                        </div>
+                        <div class="formkit-subheader" data-element="subheader" style="color: rgb(104, 104, 104); font-size: 15px;">
+                            <p style="text-align:center"><strong>▍幫助你提早退休</strong></p>
+                            <p style="text-align:center"><strong>​</strong></p>
+                            <p style="text-align:center"><strong>▍陪你打造財務自由藍圖</strong></p>
+                            <p style="text-align:center"><strong>​</strong></p>
+                            <p style="text-align:center"><strong>▍20 到 40 歲資產佈局策略</strong></p>
+                        </div>
+                        <div class="formkit-image formkit-image relative focus:outline-none" role="button" tabindex="0">
+                            <img class="cursor-pointer focus:outline-blue" src="https://embed.filekitcdn.com/e/ySZbHBfPC2itZBzpvwk9f/3X2cq4FtL75d9BiCeZBZR9" style="max-width: 100%;">
+                        </div>
+                    </div>
+                    <div data-element="column" class="formkit-column">
+                        <div data-element="fields" class="seva-fields formkit-fields">
+                            <div class="formkit-field">
+                                <input class="formkit-input" 
+                                       name="email_address" 
+                                       placeholder="Email Address" 
+                                       required="" 
+                                       type="email" 
+                                       style="color: rgb(0, 0, 0); border-color: rgb(227, 227, 227); border-radius: 4px; font-weight: 400;">
+                            </div>
+                            <button data-element="submit" 
+                                    class="formkit-submit formkit-submit" 
+                                    style="color: rgb(255, 255, 255); background-color: rgb(22, 119, 190); border-radius: 24px; font-weight: 700;">
+                                <div class="formkit-spinner">
+                                    <div></div><div></div><div></div>
+                                </div>
+                                <span class="">Subscribe</span>
+                            </button>
+                        </div>
+                        <div class="formkit-guarantee" data-element="guarantee" style="color: rgb(77, 77, 77); font-size: 13px; font-weight: 400;">
+                            <p style="text-align:center"><strong>隨時可以取消訂閱</strong></p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <center><button id="restart-btn">重新測驗</button></center>
         </div>
     </div>
+    // 測驗題目
+const questions = [
+    {
+        question: "你認為錢最重要的用途是什麼？",
+        options: [
+            {text: "滿足基本生活需求", scores: {risk: 1, knowledge: 1, investment: 1, habit: 2}},
+            {text: "創造更多財富", scores: {risk: 3, knowledge: 2, investment: 4, habit: 3}},
+            {text: "幫助他人", scores: {risk: 2, knowledge: 2, investment: 2, habit: 2}},
+            {text: "享受生活", scores: {risk: 2, knowledge: 1, investment: 2, habit: 1}}
+        ]
+    },
+    {
+        question: "面對意外支出，你通常會怎麼處理？",
+        options: [
+            {text: "動用儲蓄", scores: {risk: 1, knowledge: 3, investment: 2, habit: 4}},
+            {text: "借錢應急", scores: {risk: 4, knowledge: 1, investment: 2, habit: 1}},
+            {text: "尋求額外收入", scores: {risk: 2, knowledge: 3, investment: 3, habit: 3}},
+            {text: "縮減開支", scores: {risk: 1, knowledge: 2, investment: 1, habit: 3}}
+        ]
+    },
+    {
+        question: "你每月會儲蓄收入的多少比例？",
+        options: [
+            {text: "10%以下", scores: {risk: 3, knowledge: 1, investment: 1, habit: 1}},
+            {text: "10-30%", scores: {risk: 2, knowledge: 2, investment: 2, habit: 2}},
+            {text: "30-50%", scores: {risk: 2, knowledge: 3, investment: 3, habit: 4}},
+            {text: "50%以上", scores: {risk: 1, knowledge: 4, investment: 4, habit: 4}}
+        ]
+    },
+    {
+        question: "你認為以下哪項最能帶來財務自由？",
+        options: [
+            {text: "穩定工作", scores: {risk: 1, knowledge: 2, investment: 1, habit: 2}},
+            {text: "創業", scores: {risk: 4, knowledge: 3, investment: 4, habit: 3}},
+            {text: "投資理財", scores: {risk: 3, knowledge: 4, investment: 4, habit: 4}},
+            {text: "節儉生活", scores: {risk: 1, knowledge: 2, investment: 1, habit: 4}}
+        ]
+    },
+    {
+        question: "你平時會花時間學習理財知識嗎？",
+        options: [
+            {text: "從不關注", scores: {risk: 1, knowledge: 1, investment: 1, habit: 1}},
+            {text: "偶爾關注", scores: {risk: 2, knowledge: 2, investment: 2, habit: 2}},
+            {text: "經常學習", scores: {risk: 3, knowledge: 4, investment: 3, habit: 4}},
+            {text: "深入研究", scores: {risk: 4, knowledge: 4, investment: 4, habit: 4}}
+        ]
+    },
+    {
+        question: "你認為富人最重要的特質是？",
+        options: [
+            {text: "節儉", scores: {risk: 1, knowledge: 2, investment: 1, habit: 4}},
+            {text: "聰明才智", scores: {risk: 2, knowledge: 4, investment: 3, habit: 2}},
+            {text: "努力工作", scores: {risk: 2, knowledge: 2, investment: 2, habit: 3}},
+            {text: "眼光與機會", scores: {risk: 4, knowledge: 3, investment: 4, habit: 2}}
+        ]
+    },
+    {
+        question: "對於債務，你的看法是？",
+        options: [
+            {text: "完全避免", scores: {risk: 1, knowledge: 2, investment: 1, habit: 3}},
+            {text: "能不借就不借", scores: {risk: 2, knowledge: 3, investment: 2, habit: 3}},
+            {text: "適度運用", scores: {risk: 3, knowledge: 4, investment: 3, habit: 2}},
+            {text: "槓桿投資", scores: {risk: 4, knowledge: 4, investment: 4, habit: 2}}
+        ]
+    },
+    {
+        question: "你會如何向下一代傳遞理財觀念？",
+        options: [
+            {text: "等他們長大後自己學習", scores: {risk: 1, knowledge: 1, investment: 1, habit: 1}},
+            {text: "從零用錢管理開始教起", scores: {risk: 2, knowledge: 3, investment: 2, habit: 4}},
+            {text: "帶他們參與家庭理財決策", scores: {risk: 3, knowledge: 4, investment: 3, habit: 4}},
+            {text: "鼓勵他們做小生意體驗", scores: {risk: 4, knowledge: 3, investment: 4, habit: 3}}
+        ]
+    },
+    {
+        question: "你會為緊急支出預留多少資金？",
+        options: [
+            {text: "沒有預留", scores: {risk: 4, knowledge: 1, investment: 1, habit: 1}},
+            {text: "1-2個月生活費", scores: {risk: 3, knowledge: 2, investment: 2, habit: 2}},
+            {text: "3-6個月生活費", scores: {risk: 2, knowledge: 3, investment: 3, habit: 4}},
+            {text: "6個月以上生活費", scores: {risk: 1, knowledge: 4, investment: 3, habit: 4}}
+        ]
+    },
+    {
+        question: "如果投資出現虧損，你會如何應對？",
+        options: [
+            {text: "立即全部賣出止損", scores: {risk: 1, knowledge: 1, investment: 1, habit: 2}},
+            {text: "觀望市場再決定", scores: {risk: 2, knowledge: 2, investment: 2, habit: 3}},
+            {text: "分析原因後再調整", scores: {risk: 3, knowledge: 4, investment: 3, habit: 4}},
+            {text: "考慮逢低加碼", scores: {risk: 4, knowledge: 3, investment: 4, habit: 3}}
+        ]
+    },
+    {
+        question: "你使用哪些理財工具來管理資金？",
+        options: [
+            {text: "只用基本儲蓄帳戶", scores: {risk: 1, knowledge: 1, investment: 1, habit: 2}},
+            {text: "定期定額基金", scores: {risk: 2, knowledge: 3, investment: 2, habit: 4}},
+            {text: "多元化投資組合", scores: {risk: 3, knowledge: 4, investment: 4, habit: 4}},
+            {text: "包含衍生性商品", scores: {risk: 4, knowledge: 4, investment: 4, habit: 3}}
+        ]
+    },
+    {
+        question: "對於退休規劃，你的想法是？",
+        options: [
+            {text: "還沒考慮這麼遠", scores: {risk: 3, knowledge: 1, investment: 1, habit: 1}},
+            {text: "依靠政府保險制度", scores: {risk: 1, knowledge: 2, investment: 1, habit: 2}},
+            {text: "有固定儲蓄計劃", scores: {risk: 2, knowledge: 3, investment: 3, habit: 4}},
+            {text: "建立被動收入", scores: {risk: 4, knowledge: 4, investment: 4, habit: 4}}
+        ]
+    }
+];
 
-    <script>
-        const questions = [
-            {
-                question: "你認為錢最重要的用途是什麼？",
-                options: [
-                    {text: "滿足基本生活需求", scores: {risk: 1, knowledge: 1, investment: 1, habit: 2}},
-                    {text: "創造更多財富", scores: {risk: 3, knowledge: 2, investment: 4, habit: 3}},
-                    {text: "幫助他人", scores: {risk: 2, knowledge: 2, investment: 2, habit: 2}},
-                    {text: "享受生活", scores: {risk: 2, knowledge: 1, investment: 2, habit: 1}}
-                ]
-            },
-            {
-                question: "面對意外支出，你通常會怎麼處理？",
-                options: [
-                    {text: "動用儲蓄", scores: {risk: 1, knowledge: 3, investment: 2, habit: 4}},
-                    {text: "借錢應急", scores: {risk: 4, knowledge: 1, investment: 2, habit: 1}},
-                    {text: "尋求額外收入", scores: {risk: 2, knowledge: 3, investment: 3, habit: 3}},
-                    {text: "縮減開支", scores: {risk: 1, knowledge: 2, investment: 1, habit: 3}}
-                ]
-            },
-            {
-                question: "你每月會儲蓄收入的多少比例？",
-                options: [
-                    {text: "10%以下", scores: {risk: 3, knowledge: 1, investment: 1, habit: 1}},
-                    {text: "10-30%", scores: {risk: 2, knowledge: 2, investment: 2, habit: 2}},
-                    {text: "30-50%", scores: {risk: 2, knowledge: 3, investment: 3, habit: 4}},
-                    {text: "50%以上", scores: {risk: 1, knowledge: 4, investment: 4, habit: 4}}
-                ]
-            },
-            {
-                question: "你認為以下哪項最能帶來財務自由？",
-                options: [
-                    {text: "穩定工作", scores: {risk: 1, knowledge: 2, investment: 1, habit: 2}},
-                    {text: "創業", scores: {risk: 4, knowledge: 3, investment: 4, habit: 3}},
-                    {text: "投資理財", scores: {risk: 3, knowledge: 4, investment: 4, habit: 4}},
-                    {text: "節儉生活", scores: {risk: 1, knowledge: 2, investment: 1, habit: 4}}
-                ]
-            },
-            {
-                question: "你平時會花時間學習理財知識嗎？",
-                options: [
-                    {text: "從不關注", scores: {risk: 1, knowledge: 1, investment: 1, habit: 1}},
-                    {text: "偶爾關注", scores: {risk: 2, knowledge: 2, investment: 2, habit: 2}},
-                    {text: "經常學習", scores: {risk: 3, knowledge: 4, investment: 3, habit: 4}},
-                    {text: "深入研究", scores: {risk: 4, knowledge: 4, investment: 4, habit: 4}}
-                ]
-            },
-            {
-                question: "你認為富人最重要的特質是？",
-                options: [
-                    {text: "節儉", scores: {risk: 1, knowledge: 2, investment: 1, habit: 4}},
-                    {text: "聰明才智", scores: {risk: 2, knowledge: 4, investment: 3, habit: 2}},
-                    {text: "努力工作", scores: {risk: 2, knowledge: 2, investment: 2, habit: 3}},
-                    {text: "眼光與機會", scores: {risk: 4, knowledge: 3, investment: 4, habit: 2}}
-                ]
-            },
-            {
-                question: "對於債務，你的看法是？",
-                options: [
-                    {text: "完全避免", scores: {risk: 1, knowledge: 2, investment: 1, habit: 3}},
-                    {text: "能不借就不借", scores: {risk: 2, knowledge: 3, investment: 2, habit: 3}},
-                    {text: "適度運用", scores: {risk: 3, knowledge: 4, investment: 3, habit: 2}},
-                    {text: "槓桿投資", scores: {risk: 4, knowledge: 4, investment: 4, habit: 2}}
-                ]
-            },
-            {
-                question: "你會如何向下一代傳遞理財觀念？",
-                options: [
-                    {text: "等他們長大後自己學習", scores: {risk: 1, knowledge: 1, investment: 1, habit: 1}},
-                    {text: "從零用錢管理開始教起", scores: {risk: 2, knowledge: 3, investment: 2, habit: 4}},
-                    {text: "帶他們參與家庭理財決策", scores: {risk: 3, knowledge: 4, investment: 3, habit: 4}},
-                    {text: "鼓勵他們做小生意體驗", scores: {risk: 4, knowledge: 3, investment: 4, habit: 3}}
-                ]
-            },
-            {
-                question: "你會為緊急支出預留多少資金？",
-                options: [
-                    {text: "沒有預留", scores: {risk: 4, knowledge: 1, investment: 1, habit: 1}},
-                    {text: "1-2個月生活費", scores: {risk: 3, knowledge: 2, investment: 2, habit: 2}},
-                    {text: "3-6個月生活費", scores: {risk: 2, knowledge: 3, investment: 3, habit: 4}},
-                    {text: "6個月以上生活費", scores: {risk: 1, knowledge: 4, investment: 3, habit: 4}}
-                ]
-            },
-            {
-                question: "如果投資出現虧損，你會如何應對？",
-                options: [
-                    {text: "立即全部賣出止損", scores: {risk: 1, knowledge: 1, investment: 1, habit: 2}},
-                    {text: "觀望市場再決定", scores: {risk: 2, knowledge: 2, investment: 2, habit: 3}},
-                    {text: "分析原因後再調整", scores: {risk: 3, knowledge: 4, investment: 3, habit: 4}},
-                    {text: "考慮逢低加碼", scores: {risk: 4, knowledge: 3, investment: 4, habit: 3}}
-                ]
-            },
-            {
-                question: "你使用哪些理財工具來管理資金？",
-                options: [
-                    {text: "只用基本儲蓄帳戶", scores: {risk: 1, knowledge: 1, investment: 1, habit: 2}},
-                    {text: "定期定額基金", scores: {risk: 2, knowledge: 3, investment: 2, habit: 4}},
-                    {text: "多元化投資組合", scores: {risk: 3, knowledge: 4, investment: 4, habit: 4}},
-                    {text: "包含衍生性商品", scores: {risk: 4, knowledge: 4, investment: 4, habit: 3}}
-                ]
-            },
-            {
-                question: "對於退休規劃，你的想法是？",
-                options: [
-                    {text: "還沒考慮這麼遠", scores: {risk: 3, knowledge: 1, investment: 1, habit: 1}},
-                    {text: "依靠政府保險制度", scores: {risk: 1, knowledge: 2, investment: 1, habit: 2}},
-                    {text: "有固定儲蓄計劃", scores: {risk: 2, knowledge: 3, investment: 3, habit: 4}},
-                    {text: "建立被動收入", scores: {risk: 4, knowledge: 4, investment: 4, habit: 4}}
-                ]
-            }
-        ];
+let currentQuestionIndex = 0;
+let userScores = {
+    risk: 0,
+    knowledge: 0,
+    investment: 0,
+    habit: 0
+};
 
-        let currentQuestionIndex = 0;
-        let userScores = {
-            risk: 0,
-            knowledge: 0,
-            investment: 0,
-            habit: 0
+// DOM 載入完成後初始化
+document.addEventListener('DOMContentLoaded', function() {
+    const startBtn = document.getElementById('start-btn');
+    const restartBtn = document.getElementById('restart-btn');
+    const startScreen = document.getElementById('start-screen');
+    const quizContainer = document.getElementById('quiz-container');
+    const resultContainer = document.getElementById('result-container');
+
+    startBtn.addEventListener('click', function() {
+        startScreen.style.display = 'none';
+        quizContainer.style.display = 'block';
+        showQuestion();
+    });
+
+    restartBtn.addEventListener('click', function() {
+        currentQuestionIndex = 0;
+        userScores = {risk: 0, knowledge: 0, investment: 0, habit: 0};
+        resultContainer.style.display = 'none';
+        startScreen.style.display = 'block';
+    });
+});
+
+// 顯示當前問題
+function showQuestion() {
+    const question = questions[currentQuestionIndex];
+    document.getElementById('question-text').textContent = question.question;
+    document.getElementById('current-question').textContent = currentQuestionIndex + 1;
+
+    const optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = '';
+
+    question.options.forEach((option, index) => {
+        const optionElement = document.createElement('div');
+        optionElement.className = 'option';
+        optionElement.textContent = option.text;
+        optionElement.addEventListener('click', () => selectOption(option.scores));
+        optionsContainer.appendChild(optionElement);
+    });
+}
+
+// 選擇答案後的處理
+function selectOption(scores) {
+    Object.keys(scores).forEach(key => {
+        userScores[key] += scores[key];
+    });
+
+    currentQuestionIndex++;
+
+    if (currentQuestionIndex < questions.length) {
+        showQuestion();
+    } else {
+        showResult();
+    }
+}
+
+// 顯示結果
+function showResult() {
+    const quizContainer = document.getElementById('quiz-container');
+    const resultContainer = document.getElementById('result-container');
+
+    quizContainer.style.display = 'none';
+    resultContainer.style.display = 'block';
+
+    const avgScores = {};
+    Object.keys(userScores).forEach(key => {
+        avgScores[key] = userScores[key] / questions.length;
+        document.getElementById(`${key}-score`).textContent = 
+            (avgScores[key]).toFixed(1) + ' / 4.0';
+    });
+
+    const resultType = determineResultType(avgScores);
+    document.getElementById('result-type').textContent = resultType.type;
+    document.getElementById('result-description').textContent = resultType.description;
+}
+
+// 根據分數判斷類型
+function determineResultType(scores) {
+    if (scores.risk > 3.2 && scores.knowledge > 3.2) {
+        return {
+            type: "積極成長型投資者",
+            description: "你具有企業家精神，善於捕捉機會，願意承擔較高風險以追求更高回報。建議建立多元化投資組合，確保風險可控。"
         };
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const startBtn = document.getElementById('start-btn');
-            const restartBtn = document.getElementById('restart-btn');
-            const startScreen = document.getElementById('start-screen');
-            const quizContainer = document.getElementById('quiz-container');
-            const resultContainer = document.getElementById('result-container');
-            
-            startBtn.addEventListener('click', function() {
-                startScreen.style.display = 'none';
-                quizContainer.style.display = 'block';
-                showQuestion();
-            });
-
-            restartBtn.addEventListener('click', function() {
-                currentQuestionIndex = 0;
-                userScores = {risk: 0, knowledge: 0, investment: 0, habit: 0};
-                resultContainer.style.display = 'none';
-                startScreen.style.display = 'block';
-            });
-        });
-
-        function showQuestion() {
-            const question = questions[currentQuestionIndex];
-            document.getElementById('question-text').textContent = question.question;
-            document.getElementById('current-question').textContent = currentQuestionIndex + 1;
-
-            const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
-
-            question.options.forEach((option, index) => {
-                const optionElement = document.createElement('div');
-                optionElement.className = 'option';
-                optionElement.textContent = option.text;
-                optionElement.addEventListener('click', () => selectOption(option.scores));
-                optionsContainer.appendChild(optionElement);
-            });
-        }
-
-        function selectOption(scores) {
-            // 累加分數
-            Object.keys(scores).forEach(key => {
-                userScores[key] += scores[key];
-            });
-
-            currentQuestionIndex++;
-
-            if (currentQuestionIndex < questions.length) {
-                showQuestion();
-            } else {
-                showResult();
-            }
-        }
-
-        function showResult() {
-            const quizContainer = document.getElementById('quiz-container');
-            const resultContainer = document.getElementById('result-container');
-            
-            quizContainer.style.display = 'none';
-            resultContainer.style.display = 'block';
-
-            // 計算平均分數
-            const avgScores = {};
-            Object.keys(userScores).forEach(key => {
-                avgScores[key] = userScores[key] / questions.length;
-                document.getElementById(`${key}-score`).textContent = 
-                    (avgScores[key]).toFixed(1) + ' / 4.0';
-            });
-
-            const resultType = determineResultType(avgScores);
-            document.getElementById('result-type').textContent = resultType.type;
-            document.getElementById('result-description').textContent = resultType.description;
-        }
-
-        function determineResultType(scores) {
-            if (scores.risk > 3.2 && scores.knowledge > 3.2) {
-                return {
-                    type: "積極成長型投資者",
-                    description: "你具有企業家精神，善於捕捉機會，願意承擔較高風險以追求更高回報。建議建立多元化投資組合，確保風險可控。"
-                };
-            } else if (scores.risk > 2.8 && scores.habit > 3.2) {
-                return {
-                    type: "穩健成長型投資者",
-                    description: "你具有良好的理財意識和習慣，能在風險和收益之間取得平衡。建議持續學習，適度擴展投資範圍。"
-                };
-            } else if (scores.knowledge > 2.8) {
-                return {
-                    type: "保守理財型投資者",
-                    description: "你重視資金安全，有良好的儲蓄習慣，但可能錯過一些投資機會。建議在保持穩健的同時，可以嘗試更多元的理財方式。"
-                };
-            } else {
-                return {
-                    type: "保守觀望型投資者",
-                    description: "你對理財投資持謹慎態度，偏好安全性高的理財方式。建議逐步學習理財知識，培養良好的理財習慣。"
-                };
-            }
-        }
-    </script>
+    } else if (scores.risk > 2.8 && scores.habit > 3.2) {
+        return {
+            type: "穩健成長型投資者",
+            description: "你具有良好的理財意識和習慣，能在風險和收益之間取得平衡。建議持續學習，適度擴展投資範圍。"
+        };
+    } else if (scores.knowledge > 2.8) {
+        return {
+            type: "保守理財型投資者",
+            description: "你重視資金安全，有良好的儲蓄習慣，但可能錯過一些投資機會。建議在保持穩健的同時，可以嘗試更多元的理財方式。"
+        };
+    } else {
+        return {
+            type: "保守觀望型投資者",
+            description: "你對理財投資持謹慎態度，偏好安全性高的理財方式。建議逐步學習理財知識，培養良好的理財習慣。"
+        };
+    }
+}
 </body>
 </html>
