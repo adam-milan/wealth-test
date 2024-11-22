@@ -35,16 +35,18 @@
             border-radius: 5px;
             cursor: pointer;
             margin: 10px 0;
+            font-size: 16px;
         }
         button:hover {
             background-color: #45a049;
         }
         .option {
-            padding: 10px;
-            margin: 5px 0;
+            padding: 15px;
+            margin: 8px 0;
             border: 1px solid #ddd;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
         }
         .option:hover {
             background-color: #f5f5f5;
@@ -52,6 +54,27 @@
         .progress {
             margin-bottom: 20px;
             color: #666;
+            font-size: 16px;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #34495e;
+            margin-bottom: 15px;
+        }
+        .scores {
+            margin-top: 20px;
+        }
+        .scores h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .scores p {
+            margin: 5px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid #eee;
         }
     </style>
 </head>
@@ -59,12 +82,12 @@
     <div class="container">
         <div id="start-screen">
             <h1>財富觀測驗</h1>
-            <p>這個測驗將從多個維度評估你的財富觀念，包括：風險承受度、理財知識、投資傾向、理財習慣等。</p>
+            <p>這個測驗將從多個維度評估你的財富觀念，包括：風險承受度、理財知識、投資傾向、理財習慣等。共12題，請根據你的真實想法選擇最符合的選項。</p>
             <button id="start-btn">開始測驗</button>
         </div>
 
         <div id="quiz-container">
-            <div class="progress">問題 <span id="current-question">1</span>/15</div>
+            <div class="progress">問題 <span id="current-question">1</span>/12</div>
             <h2 id="question-text"></h2>
             <div id="options-container"></div>
         </div>
@@ -116,30 +139,12 @@
                 ]
             },
             {
-                question: "對於投資，你的態度是？",
-                options: [
-                    {text: "完全不敢投資", scores: {risk: 1, knowledge: 1, investment: 1, habit: 1}},
-                    {text: "保守型投資", scores: {risk: 2, knowledge: 2, investment: 2, habit: 3}},
-                    {text: "平衡型投資", scores: {risk: 3, knowledge: 3, investment: 3, habit: 3}},
-                    {text: "積極型投資", scores: {risk: 4, knowledge: 3, investment: 4, habit: 3}}
-                ]
-            },
-            {
                 question: "你認為以下哪項最能帶來財務自由？",
                 options: [
                     {text: "穩定工作", scores: {risk: 1, knowledge: 2, investment: 1, habit: 2}},
                     {text: "創業", scores: {risk: 4, knowledge: 3, investment: 4, habit: 3}},
                     {text: "投資理財", scores: {risk: 3, knowledge: 4, investment: 4, habit: 4}},
                     {text: "節儉生活", scores: {risk: 1, knowledge: 2, investment: 1, habit: 4}}
-                ]
-            },
-            {
-                question: "面對加薪機會，你會選擇？",
-                options: [
-                    {text: "維持現狀，避免壓力", scores: {risk: 1, knowledge: 1, investment: 1, habit: 2}},
-                    {text: "適度爭取", scores: {risk: 2, knowledge: 2, investment: 2, habit: 3}},
-                    {text: "積極爭取", scores: {risk: 3, knowledge: 3, investment: 3, habit: 3}},
-                    {text: "尋找更好的機會", scores: {risk: 4, knowledge: 3, investment: 4, habit: 3}}
                 ]
             },
             {
@@ -167,15 +172,6 @@
                     {text: "能不借就不借", scores: {risk: 2, knowledge: 3, investment: 2, habit: 3}},
                     {text: "適度運用", scores: {risk: 3, knowledge: 4, investment: 3, habit: 2}},
                     {text: "槓桿投資", scores: {risk: 4, knowledge: 4, investment: 4, habit: 2}}
-                ]
-            },
-            {
-                question: "你對財務目標的規劃是？",
-                options: [
-                    {text: "沒有特別規劃", scores: {risk: 2, knowledge: 1, investment: 1, habit: 1}},
-                    {text: "有模糊概念", scores: {risk: 2, knowledge: 2, investment: 2, habit: 2}},
-                    {text: "有明確目標", scores: {risk: 3, knowledge: 3, investment: 3, habit: 4}},
-                    {text: "詳細的長期計劃", scores: {risk: 3, knowledge: 4, investment: 4, habit: 4}}
                 ]
             },
             {
@@ -256,8 +252,6 @@
 
         function showQuestion() {
             const question = questions[currentQuestionIndex];
-function showQuestion() {
-            const question = questions[currentQuestionIndex];
             document.getElementById('question-text').textContent = question.question;
             document.getElementById('current-question').textContent = currentQuestionIndex + 1;
 
@@ -303,7 +297,6 @@ function showQuestion() {
                     (avgScores[key]).toFixed(1) + ' / 4.0';
             });
 
-            // 判斷類型
             const resultType = determineResultType(avgScores);
             document.getElementById('result-type').textContent = resultType.type;
             document.getElementById('result-description').textContent = resultType.description;
